@@ -43,7 +43,7 @@ initMatrix = False
 matBuf = i2c.read(HT16K33_ADDRESS, 17)
 
 
-class HT16K33:
+class HT16K33(object):
     def __init__(self, i2c, address=HT16K33_ADDRESS):
         self.address = address
         self.temp = bytearray(1)
@@ -56,3 +56,8 @@ class HT16K33:
     def matrixShow(self):
         matBuf[0] = 0x00
         i2c.write(self.address, matBuf)
+
+    def LEDClear(self):
+        for i in range(0, 16):
+            matBuf[i+1] = 0
+        self.matrixShow()
