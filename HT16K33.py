@@ -48,10 +48,16 @@ class HT16K33(object):
         self.address = address
         self.temp = bytearray(1)
         self.buffer = bytearray(17)
-        i2c.cmd(self.address, HT16K33_OSCILATOR_ON)
-        i2c.cmd(self.address, HT16K33_BLINK_CMD |
+        i2c.write_cmd(self.address, HT16K33_OSCILATOR_ON)
+        i2c.write_cmd(self.address, HT16K33_BLINK_CMD |
                 HT16K33_BLINK_DISPLAYON | (0 << 1))
-        i2c.cmd(self.address, HT16K33_CMD_BRIGHTNESS | 0xF)
+        i2c.write_cmd(self.address, HT16K33_CMD_BRIGHTNESS | 0xF)
+
+    def write_cmd(self, cmd):
+        buf = bytearray(1)
+        buf[0] = cmd
+        self.write(self.address, buf)
+
 
     def matrixShow(self):
         matBuf[0] = 0x00
