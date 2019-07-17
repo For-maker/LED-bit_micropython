@@ -35,11 +35,11 @@ HT16K33_BLINK_DISPLAYON = 0x01
 HT16K33_CMD_BRIGHTNESS = 0xE0
 HT16K33_OSCILATOR_ON = 0x21
 
+
 class HT16K33(object):
     """The base class for all HT16K33-based backpacks and wings."""
 
     def __init__(self, i2c, address=HT16K33_ADDRESS):
-        self.i2c = i2c
         self.address = address
         self.temp = bytearray(1)
         self.buffer = bytearray(17)
@@ -52,7 +52,7 @@ class HT16K33(object):
     def write_cmd(self, byte):
         """Send a command."""
         self.temp[0] = byte
-        self.i2c.write(self.address, self.temp)
+        i2c.write(self.address, self.temp)
 
     def blink_rate(self, rate=None):
         """Get or set the blink rate."""
@@ -61,7 +61,7 @@ class HT16K33(object):
         rate = rate & 0x02
         self.blink_rate = rate
         self.write_cmd(HT16K33_BLINK_CMD |
-                        HT16K33_BLINK_DISPLAYON | rate << 1)
+                       HT16K33_BLINK_DISPLAYON | rate << 1)
 
     def brightness(self, brightness):
         """Get or set the brightness."""
@@ -73,7 +73,7 @@ class HT16K33(object):
 
     def show(self):
         """Actually send all the changes to the device."""
-        self.i2c.write(self.address, self.buffer)
+        i2c.write(self.address, self.buffer)
 
     def fill(self, color):
         """Fill the display with given color."""
